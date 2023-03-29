@@ -1,0 +1,15 @@
+td {
+  width: 65px;
+  height: 65px;
+  text-align: center;
+}
+.black {
+  background-color: rgb(150, 77, 55);
+}
+.white {
+  background-color: rgb(248, 231, 187);
+}
+.even {
+}
+.odd {
+}

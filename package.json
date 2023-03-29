@@ -1,0 +1,12 @@
+{
+  "name": "knight-travails",
+  "version": "1.0.0",
+  "description": "Application that allows user to check shortest path for Knight piece",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Angel Ortega",
+  "license": "ISC",
+  "type": "module"
+}
