@@ -1,4 +1,4 @@
-import { createBoard } from "./createBoard.js";
+import { createBoard } from "./dom/createBoard.js";
 
 window.addEventListener("load", () => {
   //dynamially grabs ID's of HTML elements
