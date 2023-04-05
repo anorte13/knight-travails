@@ -66,6 +66,12 @@ footer > img {
 .white {
   background-color: rgb(248, 231, 187);
 }
+.start {
+  background-color: rgb(208, 40, 40);
+}
+.knight {
+  height: 80px;
+}
 .even {
 }
 .odd {

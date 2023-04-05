@@ -80,8 +80,8 @@ function constructPath(board, infoArr, item, index, newArr) {
 }
 function knightMoves(start, end) {
   let board = buildBoard();
-  let startIndex = end;
-  let endIndex = start;
+  let startIndex = findIndex(board, start);
+  let endIndex = findIndex(board, end);
   let bfs = buildInfoArr(board, startIndex);
   let adjList = buildAdjList(board);
   let queue = [startIndex];
@@ -112,4 +112,4 @@ function knightMoves(start, end) {
     }
   }
 }
-export { knightMoves, findIndex, buildBoard };
+export { knightMoves, buildBoard };
