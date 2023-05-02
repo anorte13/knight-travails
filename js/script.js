@@ -9,11 +9,14 @@ window.addEventListener("load", () => {
   let end = [];
   let squares = null;
   let knight;
+
   //dynamially grabs ID's of HTML elements
   const $ = (id) => {
     return document.getElementById(id);
   };
+
   let gameBoard = $("gameboard");
+  let output = document.getElementsByClassName("output");
   createBoard(gameBoard); //creates div elements for gameboard;
   let rows = gameBoard.getElementsByTagName("tr");
   let placeKnightBtn = $("start");
@@ -57,41 +60,47 @@ window.addEventListener("load", () => {
   const t = (y) => {
     end = y;
   };
+  //Adds cordinates to all pieces on the chessboard
   const addCords = () => {
     for (let i = 0; i < rows.length; i++) {
       squares = rows[i].getElementsByTagName("td");
       for (let n = 0; n < squares.length; n++) {
-        //attaches cordinate values to each chessboard piece
         squares[n].dataset.xcord = i;
         squares[n].dataset.ycord = n;
         squares[n].addEventListener("click", returnCords);
       }
     }
   };
+  //Clears chess board of all knight pieces and end points and clears out all coordinates
   const clearBoard = () => {
     globalCords = [];
     count = 0;
     start = [];
     end = [];
-    knight.parentNode.removeChild(knight);
     for (let i = 0; i < rows.length; i++) {
       squares = rows[i].getElementsByTagName("td");
       for (let n = 0; n < squares.length; n++) {
         if (squares[n].classList.contains("start")) {
           squares[n].classList.remove("start");
         }
+        if (
+          squares[n].classList.contains("knight") ||
+          squares[n].classList.contains("knight-path")
+        ) {
+          squares[n].removeChild(squares[n].firstElementChild);
+        }
       }
     }
   };
-
+  //Allows user to randomly place a knight on the chessboard
   const createRandomKnight = () => {
     let x = Math.floor(Math.random() * 8);
     let y = Math.floor(Math.random() * 8);
 
-    count++;
-    let cords = [x, y];
-    globalCords = cords;
-    console.log(globalCords);
+    count++; //Increments counter as if adding knight for the first move
+
+    globalCords = [x, y];
+
     s(globalCords);
     placeKnightBtn.disabled = true;
 
@@ -108,11 +117,34 @@ window.addEventListener("load", () => {
           //append knight image to choose square
           squares[n].classList.add("knight");
           squares[n].appendChild(knight);
+          console.log(knight);
         }
       }
     }
   };
+  const knightPath = (arr) => {
+    arr.forEach((element, index) => {
+      if (index < 1) return;
 
+      for (let i = 0; i < rows.length; i++) {
+        squares = rows[i].getElementsByTagName("td");
+
+        for (let n = 0; n < squares.length; n++) {
+          if (
+            squares[n].dataset["xcord"] === `${element[0]}` &&
+            squares[n].dataset["ycord"] === `${element[1]}`
+          ) {
+            knight = document.createElement("img");
+            knight.src = "./img/chess.png";
+            knight.classList.add("knight");
+
+            squares[n].classList.add("knight-path");
+            squares[n].appendChild(knight);
+          }
+        }
+      }
+    });
+  };
   placeKnightBtn.addEventListener("click", () => {
     addCords();
     placeKnightBtn.disabled = true;
@@ -124,19 +156,17 @@ window.addEventListener("load", () => {
   });
   travailBtn.addEventListener("click", () => {
     let path = modules.knightMoves(start, end);
-    path.forEach((element) => {
-      console.log(element);
-    });
+    knightPath(path);
     placeKnightBtn.disabled = false;
     endKnightBtn.disabled = false;
     clear.disabled = false;
     travailBtn.disabled = true;
+    output.innerHTML += `<p>You made it in ${path.length - 1} moves! <p>`;
   });
   randomKnight.addEventListener("click", () => {
     for (let i = 0; i < rows.length; i++) {
       squares = rows[i].getElementsByTagName("td");
       for (let n = 0; n < squares.length; n++) {
-        //attaches cordinate values to each chessboard piece
         squares[n].dataset.xcord = i;
         squares[n].dataset.ycord = n;
       }

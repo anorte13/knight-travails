@@ -97,9 +97,6 @@ function knightMoves(start, end) {
         let knightPath = [];
         constructPath(board, bfs, bfs[targetIndex], targetIndex, knightPath);
         let result = knightPath.reverse().splice(0, 0, start);
-        console.log(
-          `You made it in ${knightPath.length - 1} moves! Here's your path:`
-        );
         return knightPath;
       } else {
         // Update info for neighbor square & enqueue it
