@@ -78,13 +78,19 @@ footer > img {
 }
 .knight {
   height: 80px;
+  transition: transform 0.5s;
 }
 .output {
   height: 200px;
 }
-.even {
+.animate-knight {
+  animation: moveKnight 0.5s forwards;
 }
-.odd {
-}
-.knight-path {
+@keyframes moveKnight {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

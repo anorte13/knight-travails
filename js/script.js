@@ -26,7 +26,6 @@ window.addEventListener("load", () => {
   travailBtn.disabled = true;
   let clear = $("clear");
   clear.disabled = true; //disable to prevent user from clearing board mid move
-  let board = modules.buildBoard();
 
   //uses eventListner to let clicked square return a pair of cordinates;
   const returnCords = (e) => {
@@ -39,7 +38,7 @@ window.addEventListener("load", () => {
     cords.push(y);
     globalCords = cords;
     if (count % 2 !== 0) {
-      s(globalCords);
+      startPoint(globalCords);
       //create knight image
       knight = document.createElement("img");
       knight.src = "./img/chess.png";
@@ -48,16 +47,16 @@ window.addEventListener("load", () => {
       chessSquare.classList.add("knight");
       chessSquare.appendChild(knight);
     } else {
-      t(globalCords);
+      endPoint(globalCords);
       //add red sqaure to end piece
       chessSquare.classList.add("start");
     }
   };
   //returns start and end points of respective function
-  const s = (x) => {
+  const startPoint = (x) => {
     start = x;
   };
-  const t = (y) => {
+  const endPoint = (y) => {
     end = y;
   };
   //Adds cordinates to all pieces on the chessboard
@@ -101,7 +100,7 @@ window.addEventListener("load", () => {
 
     globalCords = [x, y];
 
-    s(globalCords);
+    startPoint(globalCords);
     placeKnightBtn.disabled = true;
 
     for (let i = 0; i < rows.length; i++) {
@@ -123,28 +122,47 @@ window.addEventListener("load", () => {
     }
   };
   const knightPath = (arr) => {
-    arr.forEach((element, index) => {
-      if (index < 1) return;
+    let currentIndex = 1;
+
+    const appendNextKnight = () => {
+      if (currentIndex >= arr.length) {
+        return;
+      }
+      const element = arr[currentIndex];
+      const x = element[0];
+      const y = element[1];
+
+      const rows = document.getElementsByTagName("tr");
 
       for (let i = 0; i < rows.length; i++) {
-        squares = rows[i].getElementsByTagName("td");
+        const squares = rows[i].getElementsByTagName("td");
 
         for (let n = 0; n < squares.length; n++) {
-          if (
-            squares[n].dataset["xcord"] === `${element[0]}` &&
-            squares[n].dataset["ycord"] === `${element[1]}`
-          ) {
-            knight = document.createElement("img");
-            knight.src = "./img/chess.png";
-            knight.classList.add("knight");
+          const square = squares[n];
 
-            squares[n].classList.add("knight-path");
-            squares[n].appendChild(knight);
+          if (
+            square.dataset["xcord"] === `${x}` &&
+            square.dataset["ycord"] === `${y}`
+          ) {
+            const knight = document.createElement("img");
+            knight.src = "./img/chess.png";
+            knight.classList.add("knight", "animate-knight");
+
+            square.classList.add("knight-path");
+            square.appendChild(knight);
           }
         }
       }
-    });
+      currentIndex++;
+      // Adjust the delay between each image append operation as per your preference
+      setTimeout(appendNextKnight, 1000); // 500ms delay between each image append
+      // Or use setInterval for a constant delay
+      // setInterval(appendNextKnight, 500); // 500ms delay between each image append
+    };
+
+    appendNextKnight();
   };
+
   placeKnightBtn.addEventListener("click", () => {
     addCords();
     placeKnightBtn.disabled = true;
@@ -161,7 +179,7 @@ window.addEventListener("load", () => {
     endKnightBtn.disabled = false;
     clear.disabled = false;
     travailBtn.disabled = true;
-    output.innerHTML += `<p>You made it in ${path.length - 1} moves! <p>`;
+    output.innerHTML = `<p>You made it in ${path.length - 1} moves! <p>`;
   });
   randomKnight.addEventListener("click", () => {
     for (let i = 0; i < rows.length; i++) {
